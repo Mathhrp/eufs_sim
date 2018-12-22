@@ -41,6 +41,7 @@ class Convert:
 
     def listener(self):
         rospy.Subscriber("/cmd_vel", Twist, self.callback)
+	rospy.Subscriber("/control/pure_pursuit/control_command",Twist,self.callback)
         rospy.spin()
 
 if __name__ == '__main__':

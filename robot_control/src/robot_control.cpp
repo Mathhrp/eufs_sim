@@ -82,6 +82,7 @@ public:
 
     // Joint states published by the joint_state_controller of the Controller Manager
     ros::Subscriber joint_state_sub_;
+    ros::Subscriber control_pure_pursuit_;
 
     // High level robot command
     ros::Subscriber cmd_sub_;
@@ -155,7 +156,10 @@ public:
     // Broadcaster for odom tf
     tf::TransformBroadcaster odom_broadcaster;
 
-
+/*    void controlCallback(const fsd_common_msgs::ControlCommand msg)
+    {
+    ROS_INFO("I heard: [%s]", msg.throttle);
+    }*/
     SimController(ros::NodeHandle h) :  diagnostic_(),
                                         nh_(h), private_nh_("~"),
                                         desired_freq_(100),
@@ -245,6 +249,7 @@ public:
 
         // Subscribers
         joint_state_sub_ = nh_.subscribe<sensor_msgs::JointState>("joint_states", 1, &SimController::jointStateCallback, this);
+        //control_pure_pursuit_ = nh_.subscribe("/control/pure_pursuit/car_command",1000,controlCallback)
         cmd_sub_ = robot_control_node_handle.subscribe<ackermann_msgs::AckermannDriveStamped>("command", 1, &SimController::commandCallback, this);
 
         // Adevertise reference topics for the controllers
@@ -547,3 +552,4 @@ int main(int argc, char** argv) {
 
     return (0);
 }
+
